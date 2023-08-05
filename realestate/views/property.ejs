@@ -1,0 +1,163 @@
+<%-include("partials/header.ejs")-%>
+
+
+<!-- filter code -->
+<div class="filter-container">
+  <h2>Filter Properties</h2>
+  <form id="property-filter-form" action = "/property" method="post">
+    <label for="price-range">Price Range:</label>
+    <input type="number" name="min-price" placeholder="Min Price" />
+    <input type="number" name="max-price" placeholder="Max Price" />
+
+
+
+
+
+
+
+
+
+
+
+
+    <label for="sq-feet">Square Feet:</label>
+    <input type="number" name="min-sq-feet" placeholder="Min Sq Feet" />
+    <input type="number" name="max-sq-feet" placeholder="Max Sq Feet" />
+
+    <label for="no_of_bedrooms">Number of Bedrooms:</label>
+    <input type="number" name="no_of_bedrooms" placeholder="Bedrooms" />
+
+    <label for="rent_sell">Rent/Sell:</label>
+    <select name="rent_sell">
+      <option value="">All</option>
+      <option value="Rent">Rent</option>
+      <option value="Sell">Sell</option>
+    </select>
+
+    <label for="area">Area:</label>
+    <input type="text" name="area" placeholder="Area" />
+
+    <label for="property_type">Property Type:</label>
+    <input type="text" name="property_type" placeholder="Property Type" list = "sugessions"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <label for="built-year">Built Year:</label>
+    <input type="number" name="built-year" placeholder="Built Year" />
+
+
+    <label for="current_status">AVAILABILITY :</label>
+    <select name="current_status">
+      <option value="">All</option>
+      <option value="Rent">Yes</option>
+      <option value="Sell">No</option>
+    </select>
+
+    <button type="submit">Apply Filter</button>
+  </form>
+</div>
+
+<!-- end of filter code -->
+<%for(var i = 0 ; i < property_data.length ; i++){%>
+  <hr id = "divider">
+  <%var insert = property_data[i];%>
+  <div class = 'row' id = "box">
+    <div class = "col-md-3" >
+      <%var photo = insert.rent_sell + insert.property_type%>
+      <%if(photo === "RentHouse"){%>
+        <img src="house_rent.png" id = "photo" >
+     <%}else if(photo === "SellHouse"){%>
+        <img src="house_sale.png" id = "photo">
+     <%}else if(photo === "RentPlot" || photo === "Rentplot"){%>
+        <img src="app_rent.png" id = "photo">
+      <%}else{%>
+        <img src="app_sale.png" id = "photo">
+     <%}%>
+     
+     
+  </div>
+    <div class = "col-md-9" >
+      <div class="row col-md-12">
+        <div class = "col-md-6">
+          <h3 style="font-weight: 900;">ADDRESS<span style="font-size: large; font-weight: 500;">   : <%=insert.address%></span></h3>
+        </div>
+        <div class = "col-md-6">
+          <h3 style="font-weight: 900;">BHK:  <span style="font-size: large; font-weight: 500;">   <%=insert.no_of_bedrooms%></span></h3>          
+        </div>
+      </div>
+      <div class="row col-md-12">
+        <div class = "col-md-6">
+          <h3 style="font-weight: 900;">SQ-FEET:<span style="font-size: large; font-weight: 500;">   <%=insert.sq_feet%></span></h3>
+        </div>
+        <div class = "col-md-6">
+          <h3 style="font-weight: 900;">PRICE:<span style="font-size: large; font-weight: 500;">   <%=insert.rent_sell_price%></spa></h3>
+        </div>
+      </div>
+      <div class="row col-md-12">
+        <div class = "col-md-6">
+          <h3 style="font-weight: 900;">BUILT-YR: <span style="font-size: large; font-weight: 500;">   <%=insert.built_year%></span></h3>
+        </div>
+        <div class = "col-md-6">
+          <h3 style="font-weight: 900;">TYPE:  <span style="font-size: large; font-weight: 500;"> <%=insert.property_type%></span></h3>
+        </div>   
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+
+
+<%}%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%-include('partials/footer.ejs')%>

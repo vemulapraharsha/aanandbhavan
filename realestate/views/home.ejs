@@ -1,0 +1,166 @@
+
+<%-include("partials/header.ejs")-%>
+
+<!-- Login form starts here -->
+
+
+
+
+
+
+<form class = "form">
+    <!-- selection -->
+
+    <div class="dropdown">
+        <button class="dropbtn">Select Name</button>
+        <div class="dropdown-content">
+          <select id="nameSelect">
+            <option disabled selected id = "hedopt" class = "options">--Select--</option>
+            <option value = "agent" class = "options">Agent</option>
+            <option value = "buyer" class = "options">Buyer</option>
+            <option value = "seller" class = "options">Seller</option>
+            <!-- Add more names here -->
+          </select>
+        </div>
+    </div>
+
+
+    <!-- Email input -->
+    <div class="form-outline mb-4">
+    <input type="email" id="form2Example1" class="form-control" name = "email" placeholder="email"/>
+    <label class = "form-label" for = "form2Example1">Email address</label>
+    </div>
+
+    <!-- Password input -->
+    <div class="form-outline mb-4">
+    <input type="password" id="form2Example2" class="form-control" name = "password"  placeholder="Password"/>
+    <label class="form-label" for="form2Example2">Password</label>
+    </div>
+
+    <!-- 2 column grid layout for inline styling -->
+    <div class="row mb-4">
+    <div class="col d-flex justify-content-center">
+    <!-- Checkbox -->
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+        <label class="form-check-label" for="form2Example31"> Remember me </label>
+    </div>
+    </div>
+
+    <div class="col">
+    <!-- Simple link -->
+    <a href="#!">Forgot password?</a>
+    </div>
+    </div>
+
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary btn-block mb-4" id = "final">Sign in</button>
+
+    <!-- Register buttons -->
+    <div class="text-center">
+    <p>Not a member? <a href="#!">Register</a></p>
+    <p>or sign up with:</p>
+    <button type="button" class="btn btn-link btn-floating mx-1">
+    <i class="fab fa-facebook-f"></i>
+    </button>
+
+    <button type="button" class="btn btn-link btn-floating mx-1">
+    <i class="fab fa-google"></i>
+    </button>
+
+    <button type="button" class="btn btn-link btn-floating mx-1">
+    <i class="fab fa-twitter"></i>
+    </button>
+
+    <button type="button" class="btn btn-link btn-floating mx-1">
+    <i class="fab fa-github"></i>
+    </button>
+    </div>
+</form>
+
+
+
+<!-- Login form ends here -->
+
+
+
+
+
+
+
+<script>
+
+
+    var toto = {};
+    var selectedName;
+    const form = document.querySelector('form');
+
+    // selected name event
+    const nameSelect = document.getElementById('nameSelect');
+    nameSelect.addEventListener('change', () => {
+        selectedName = nameSelect.options[nameSelect.selectedIndex].value;
+        console.log(selectedName);
+    });
+    // selected name event ends
+
+
+
+    form.addEventListener('submit' , (e)=>{
+        e.preventDefault();
+        const formData = new FormData(form);
+        for(item of formData){
+            toto[item[0]] = item[1] ;
+        }
+
+        // login validation
+        const point1 =  toto["email"];
+        const point2 = toto["password"];
+
+        // adding name to data
+        toto["logging"] = selectedName;
+
+        console.log(toto);
+
+        if(selectedName == null ){
+            alert("Select Name to sign in");
+        }else if(selectedName != null && point1.length != 0 && point2.length != 0){
+
+            fetch("/" , {
+            method : 'POST',
+            header : {
+                "Content-Type" : "application/json"
+            },
+            body :JSON.stringify(toto)
+            })
+            .then(res => res.json())
+            .then(responseData => {
+             console.log("Response data:", responseData);
+             if (responseData['result'] === 'datafound') {
+                // Redirect to the desired page
+                window.location.href = '/agent';
+            } else {
+                alert('Wrong email id or password!!');
+            }
+            })
+            // .then(res => res.json())
+            .catch(error => console.log("Error:", error));
+            
+        }else{
+            alert("Enter email or password");
+        }   
+
+
+
+
+    }); 
+         
+        
+    
+
+    
+
+</script>
+
+
+
+<%-include('partials/footer.ejs')%>

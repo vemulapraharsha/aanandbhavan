@@ -1,0 +1,99 @@
+<%-include("partials/header.ejs")-%>
+
+
+
+
+<div class="row">  
+    <div class="col-md-6">
+        <div class = "row">
+            <%var sex;%>
+            <%if(agent_data[0].gender === 'm'){%>
+                <%sex = 'man.png';%>
+            <%}else{%>
+                <%sex = 'women.png';%>
+            <%}%>
+            <img src="<%=sex%>" class = "agent_img col-mid-7"> 
+        </div>
+        <div class="row col-md-6">
+            <button class = "todo" onclick = "explode()" style = ""><em>SUBMIT</em></button>
+        </div>
+    </div>  
+    <div class = "col-md-6 total_data">
+        <div class = "row">
+            <%var data = agent_data[0].agent_id %>
+            <h3><span class = "headings">AGENT ID :</span><%= data%></h3>
+        </div>
+        <div class = "row">
+            <% data = agent_data[0].f_name %>
+            <h3><span class = "headings">FIRST NAME :</span><input type="text" id = "D1" name = "f_name" placeholder="<%= data %>"></h3>
+        </div>
+        <div class = "row">
+            <% data = agent_data[0].s_name %>
+            <h3><span class = "headings">SECOND NAME :</span><input type="text" id = "D2" name = "s_name" placeholder="<%= data %>"></h3>
+        </div>
+
+        <div class = "row">
+            <% data = agent_data[0].phone_number %>
+            <h3><span class = "headings">PHONE NUMBER :</span><input type="text" id = "D3" name = "phone_number" placeholder="<%= data %>"></h3>
+        </div>
+        <div class = "row">
+            <% data = agent_data[0].area %>
+            <h3><span class = "headings">AREA :</span><input type="text" id = "D4" name = "area" placeholder="<%= data %>"></h3>
+        </div>
+        <div class = "row">
+            <% data = agent_data[0].email %>
+            <h3><span class = "headings">EMAIL :</span><input type="text" id = "D5" name = "email" placeholder="<%= data %>"></h3>
+        </div>
+        <div class = "row" >
+            <p><% data = agent_data[0].password %></p>
+            <h3><span class = "headings">PASSWORD :</span><input type="text" id = "D6" name = "password" placeholder="<%= data %>"></h3>
+        </div>
+    </div>
+</div>  
+
+<script>
+    var changing_data = {}; 
+    function explode(){ 
+        var count = 0;
+        for(var i = 1 ; i < 7 ; i++){
+            var iter = "D"+i;
+            const input_data = document.getElementById(iter).value;
+            const name_data = document.getElementById(iter).getAttribute('name');
+            changing_data[name_data] = input_data;
+            if(input_data === ""){
+                count++;
+            }
+        }
+        if(count === 6){
+            alert("Insert some data to SUBMIT!!");
+        }else{
+            fetch("/agent" , {
+                method : 'POST',
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body :JSON.stringify(changing_data)
+            })
+            .then(res => res.json())
+            .then(responseData => {
+                console.log( "dataget:" ,responseData);
+                if(responseData['wrong'] === 'email'){
+                    alert('Invalid email !!');
+                }else if(responseData['wrong'] === 'phone'){
+                    alert('Invalid Phone Number');
+                }else{
+                alert("Data Updated Successfully!!");
+                console.log("dododododdo    ");
+                window.location.href = '/agent';
+                }
+            })
+            .catch((error) =>{
+                window.location.href = '/agent',
+                console.log("Error:", error)
+            });
+        }
+    }
+</script>
+
+
+<%-include('partials/footer.ejs')%>
